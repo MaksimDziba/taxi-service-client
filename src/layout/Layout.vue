@@ -11,18 +11,44 @@
       <a-layout-header
         style="background: #fff; padding: 0 30px; text-align: right"
       >
-        <span>
+        <span class="btn-auth">
           <a-button
             type="primary"
-            shape="circle"
+            shape="round"
             size="middle"
-            @click="setUserToken"
+            @click="handleModalType('login')"
           >
             <template #icon>
               <login-outlined />
             </template>
+            Авторизация
           </a-button>
-          Авторизация
+        </span>
+        <span class="btn-auth">
+          <a-button
+            type="primary"
+            shape="round"
+            size="middle"
+            @click="handleModalType('registration')"
+          >
+            <template #icon>
+              <login-outlined />
+            </template>
+            Регистрация
+          </a-button>
+        </span>
+        <span class="btn-auth">
+          <a-button
+            type="primary"
+            shape="round"
+            size="middle"
+            @click="handleModalType('logout')"
+          >
+            <template #icon>
+              <login-outlined />
+            </template>
+            Выход
+          </a-button>
         </span>
       </a-layout-header>
 
@@ -47,39 +73,46 @@
         Taxi Service ©2022 Created by Maksim Dziba
       </a-layout-footer>
     </a-layout>
+
+    <modal-auth v-if="modalType" :type="modalType" @close="handleModalClose" />
   </a-layout>
 </template>
 
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-import { singUp } from "../api/auth";
+import { defineComponent, ref } from "vue";
+
+import ModalAuth from "../components/modals/auth/ModalAuth.vue";
 
 import { LoginOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   components: {
     LoginOutlined,
+    ModalAuth,
   },
   setup() {
     // ui data
     const collapsed = ref<boolean>(false);
-    const loading = ref(true);
+    const loading = ref<boolean>(true);
+    const modalType = ref<string>("");
 
-    async function setUserToken() {
-      loading.value = true;
+    const handleModalType = (value) => {
+      modalType.value = value;
+    };
 
-      try {
-        await singUp();
-      } finally {
-        loading.value = false;
-      }
-    }
+    const handleModalClose = () => {
+      modalType.value = "";
+    };
+
+    // TODO: добавить лоадер из стейта
 
     return {
       collapsed,
       loading,
-      setUserToken,
+      modalType,
+      handleModalType,
+      handleModalClose,
     };
   },
 });
@@ -107,5 +140,9 @@ export default defineComponent({
 }
 .logo img {
   height: 40px;
+}
+
+.btn-auth {
+  margin-right: 10px;
 }
 </style>
