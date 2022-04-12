@@ -1,5 +1,9 @@
 <template>
-  <a-table :dataSource="data" :columns="columns" />
+  <a-table :dataSource="data" :columns="columns">
+    <template v-slot:checkbox="{ value, record, column }">
+      <a-checkbox :checked="value" :disabled="column.slots.props.disabled" />
+    </template>
+  </a-table>
 </template>
 
 <script>

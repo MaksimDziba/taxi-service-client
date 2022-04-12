@@ -75,6 +75,8 @@
     </a-layout>
 
     <modal-auth v-if="modalType" :type="modalType" @close="handleModalClose" />
+
+    <side-pages />
   </a-layout>
 </template>
 
@@ -82,9 +84,15 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 
+// import { useStore } from "vuex";
+
 import ModalAuth from "../components/modals/auth/ModalAuth.vue";
 
+// icons
 import { LoginOutlined } from "@ant-design/icons-vue";
+
+// interface
+import { ISidePageState } from "../service/store/modules/side-page/interface";
 
 export default defineComponent({
   components: {
@@ -92,6 +100,8 @@ export default defineComponent({
     ModalAuth,
   },
   setup() {
+    // const store = useStore<ISidePageState>();
+
     // ui data
     const collapsed = ref<boolean>(false);
     const loading = ref<boolean>(true);
