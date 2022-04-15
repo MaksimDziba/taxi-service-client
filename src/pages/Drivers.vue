@@ -1,20 +1,24 @@
 <template>
   <a-typography-title :level="3">Водители</a-typography-title>
 
-  <a-button @click="sidePageCreateDriver">Добавить водителя</a-button>
+  <a-button type="primary" @click="sidePageCreateDriver"
+    >Добавить водителя</a-button
+  >
+  <a-divider />
 
   <main-table :data="drivers" :columns="columns" />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
-import MainTable from "../ui/table/Table.vue";
 import DriversService from "../api/drivers";
 
-import { IDriver } from "../types/Driver";
+import { defineComponent, onMounted, ref } from "vue";
+import { useStore } from "vuex";
+
+import MainTable from "../ui/table/Table.vue";
 
 // interface
-import { useStore } from "vuex";
+import { IDriver } from "../types/Driver";
 
 const columns = [
   {
@@ -88,7 +92,7 @@ export default defineComponent({
       loading.value = true;
 
       try {
-        const fetchDrivers = await DriversService.getAll();
+        const fetchDrivers = await DriversService.getAll({});
 
         drivers.value = fetchDrivers;
       } finally {

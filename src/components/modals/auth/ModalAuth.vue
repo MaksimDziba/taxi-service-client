@@ -28,7 +28,7 @@ import Registration from "./Registration.vue";
 import Login from "./Login.vue";
 
 // interface
-import { IUser } from "../../../interface/User";
+import { IUser } from "../../../types/User";
 
 export default defineComponent({
   components: {

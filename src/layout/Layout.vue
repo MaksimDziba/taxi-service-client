@@ -91,9 +91,6 @@ import ModalAuth from "../components/modals/auth/ModalAuth.vue";
 // icons
 import { LoginOutlined } from "@ant-design/icons-vue";
 
-// interface
-import { ISidePageState } from "../service/store/modules/side-page/interface";
-
 export default defineComponent({
   components: {
     LoginOutlined,

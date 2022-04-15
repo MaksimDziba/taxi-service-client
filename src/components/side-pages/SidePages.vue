@@ -20,24 +20,30 @@ import { defineComponent, computed } from "vue";
 import { useStore } from "vuex";
 
 import CreateDriver from "./drivers/CreateDriver.vue";
+import CreateVehicle from "./vehicles/CreateVehicle.vue";
+
+const sidePages = {
+  "create-driver": {
+    titleText: "Добавить водителя",
+    component: "CreateDriver",
+    data: {},
+  },
+  "create-vehicle": {
+    titleText: "Добавить транспортное средство",
+    component: "CreateVehicle",
+    data: {},
+  },
+};
 
 export default defineComponent({
   components: {
     CreateDriver,
+    CreateVehicle,
   },
   setup() {
     const store = useStore();
 
-    const sidePage = computed(
-      () =>
-        ({
-          "create-driver": {
-            titleText: "Добавить водителя",
-            component: "CreateDriver",
-            data: {},
-          },
-        }[store.state.type])
-    );
+    const sidePage = computed(() => sidePages[store.state.type]);
 
     const handleClose = () => {
       store.dispatch("closeSidePage");
