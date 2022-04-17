@@ -1,6 +1,7 @@
 <template>
   <a-table
     emptyText="Данные отсутствуют"
+    class="ui-table"
     :dataSource="data"
     :columns="columns"
     :loading="loading"
@@ -48,3 +49,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.ui-table :deep(.ant-table-row):hover {
+  cursor: pointer;
+  color: #1890ff;
+}
+</style>
