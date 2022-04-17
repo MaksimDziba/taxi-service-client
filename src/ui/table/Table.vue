@@ -1,5 +1,5 @@
 <template>
-  <a-table :dataSource="data" :columns="columns">
+  <a-table :dataSource="data" :columns="columns" :loading="loading">
     <template v-slot:checkbox="{ value, record, column }">
       <a-checkbox :checked="value" :disabled="column.slots.props.disabled" />
     </template>
@@ -14,6 +14,7 @@ export default defineComponent({
   props: {
     data: Array,
     columns: Array,
+    loading: Boolean,
   },
 });
 </script>

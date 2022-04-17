@@ -36,11 +36,11 @@ export default defineComponent({
   props: {
     modelValue: Object,
   },
-  setup(props, context) {
+  setup(props, { emit }) {
     const formRef = ref<FormInstance>();
 
     const handleValidate = (_, valid) => {
-      context.emit("is-valid", valid);
+      emit("is-valid", valid);
     };
 
     return {

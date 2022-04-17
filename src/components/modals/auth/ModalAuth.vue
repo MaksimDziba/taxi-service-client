@@ -43,7 +43,7 @@ export default defineComponent({
     },
   },
   emits: ["close"],
-  setup(props, context) {
+  setup(props, { emit }) {
     const visible = ref<boolean>(!!props.type);
     const validForm = ref<boolean>(false);
 
@@ -73,7 +73,7 @@ export default defineComponent({
     const handleClose = () => {
       visible.value = false;
 
-      context.emit("close");
+      emit("close");
     };
 
     const handleOk = async () => {

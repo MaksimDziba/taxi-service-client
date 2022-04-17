@@ -116,7 +116,7 @@ import ServiceDriver from "../../../api/drivers";
 
 export default defineComponent({
   name: "CreateDriver",
-  setup(props, context) {
+  setup(props, { emit }) {
     const formRef = ref<FormInstance>();
 
     const formData = reactive({
@@ -131,7 +131,7 @@ export default defineComponent({
     });
 
     const handleValidate = (_, valid) => {
-      context.emit("is-valid", valid);
+      emit("is-valid", valid);
     };
 
     const onSubmit = () => {
