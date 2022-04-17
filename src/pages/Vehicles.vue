@@ -4,7 +4,12 @@
   <a-button type="primary" @click="openSidePage">Добавить транспорт</a-button>
   <a-divider />
 
-  <main-table :data="vehicles" :columns="columns" :loading="loading" />
+  <main-table
+    :data="vehicles"
+    :columns="columns"
+    :loading="loading"
+    side-page-type="create-vehicle"
+  />
 </template>
 
 <script lang="ts">
@@ -43,6 +48,7 @@ const columns = [
     title: "Дата выпуска",
     dataIndex: "dateManufacture",
     key: "dateManufacture",
+    slots: { customRender: "date" },
   },
   {
     title: "Грузоподъемность",

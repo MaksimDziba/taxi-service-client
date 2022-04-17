@@ -102,7 +102,10 @@ export default defineComponent({
     }
 
     const sidePageCreateDriver = () =>
-      store.dispatch("setSidePage", { type: "create-driver", show: true });
+      store.commit("sidepage/SET_SIDE_PAGE", {
+        type: "create-driver",
+        show: true,
+      });
 
     watch(isUpdateTable, () => {
       fetchDrivers();
