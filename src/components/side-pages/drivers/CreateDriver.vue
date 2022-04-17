@@ -96,7 +96,12 @@
     </a-form>
 
     <div class="side-page__footer">
-      <a-button type="primary" size="middle" @click="onSubmit">
+      <a-button
+        type="primary"
+        size="middle"
+        :disabled="validForm"
+        @click="onSubmit"
+      >
         Создать
       </a-button>
 
@@ -110,39 +115,66 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, toRaw } from "vue";
 
+import { useStore } from "vuex";
+
 import type { FormInstance } from "ant-design-vue";
 
-import ServiceDriver from "../../../api/drivers";
+import DriverService from "../../../api/drivers";
 
 export default defineComponent({
   name: "CreateDriver",
+  props: {
+    data: Object,
+  },
   setup(props, { emit }) {
-    const formRef = ref<FormInstance>();
+    const store = useStore();
 
-    const formData = reactive({
-      name: "",
-      passport: "",
-      address: "",
-      phone: "",
-      driverLicense: "",
-      contractNumber: "",
-      paymentMethod: "phone",
-      transportationAnimals: false,
-    });
+    const formRef = ref<FormInstance>();
+    const validForm = ref<boolean>(true);
+
+    const isEdit = Object.keys(props.data).length;
+
+    const formData = reactive(
+      isEdit
+        ? props.data
+        : {
+            name: "",
+            passport: "",
+            address: "",
+            phone: "",
+            driverLicense: "",
+            contractNumber: "",
+            paymentMethod: "phone",
+            transportationAnimals: false,
+          }
+    );
 
     const handleValidate = (_, valid) => {
       emit("is-valid", valid);
     };
 
-    const onSubmit = () => {
-      formRef.value
-        .validate()
-        .then(() => {
-          ServiceDriver.create(toRaw(formData));
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+    const fetchEditDriver = async (data) =>
+      await DriverService.update(data.id, data);
+    const fetchCreateDriver = async (data) => await DriverService.create(data);
+
+    const onSubmit = async () => {
+      try {
+        const isValidForm = await formRef.value.validate();
+
+        if (isValidForm) {
+          const driver = isEdit
+            ? fetchEditDriver(toRaw(formData))
+            : fetchCreateDriver(toRaw(formData));
+
+          if (driver) {
+            resetForm();
+            store.commit("table/IS_UPDATE_TABLE");
+            store.commit("sidepage/CLOSE_SIDE_PAGE");
+          }
+        }
+      } catch (error) {
+        console.log("При создании водителя произошла ошибка", error);
+      }
     };
 
     const resetForm = () => {
@@ -155,6 +187,7 @@ export default defineComponent({
       handleValidate,
       onSubmit,
       resetForm,
+      validForm,
     };
   },
 });

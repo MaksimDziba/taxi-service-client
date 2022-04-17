@@ -10,7 +10,7 @@
     width="540"
     @close="handleClose"
   >
-    <component :is="type" :data="sidePage.data" />
+    <component :is="type" :data="data" />
   </a-drawer>
 </template>
 
@@ -53,6 +53,7 @@ export default defineComponent({
     return {
       type: computed(() => sidePageStore.type),
       visible: computed(() => sidePageStore.show),
+      data: computed(() => sidePageStore.data),
       sidePage,
       handleClose,
     };

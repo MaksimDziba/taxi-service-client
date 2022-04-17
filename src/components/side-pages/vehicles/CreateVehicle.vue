@@ -142,36 +142,53 @@ const capacity = [
 ];
 
 export default defineComponent({
-  name: "CreateDriver",
+  name: "CreateVehicle",
   components: {
     SearchDrivers,
   },
-  setup() {
+  props: {
+    data: Object,
+  },
+  setup(props) {
     const store = useStore();
+
     const formRef = ref<FormInstance>();
     const validForm = ref<boolean>(true);
+    const isEdit = Object.keys(props.data).length;
+
     const options = ref<[] | { value: string }[]>([]);
     const capacityOptions = capacity;
 
-    const formData = reactive({
-      gosNumber: "",
-      dateManufacture: "",
-      carModel: "",
-      carColor: "",
-      capacity: null,
-      babyChair: false,
-      maxCountPassenger: null,
-      drivers: [],
-    });
+    const formData = reactive(
+      isEdit
+        ? props.data
+        : {
+            gosNumber: "",
+            dateManufacture: "",
+            carModel: "",
+            carColor: "",
+            capacity: null,
+            babyChair: false,
+            maxCountPassenger: null,
+            drivers: [],
+          }
+    );
+
+    const fetchEditVehicle = async (data) =>
+      await VehicleService.update(data.id, data);
+    const fetchCreateVehicle = async (data) =>
+      await VehicleService.create(data);
 
     const onSubmit = async () => {
       try {
         const isValidForm = await formRef.value.validate();
 
         if (isValidForm) {
-          const driver = await VehicleService.create(toRaw(formData));
+          const vehicle = isEdit
+            ? fetchEditVehicle(toRaw(formData))
+            : fetchCreateVehicle(toRaw(formData));
 
-          if (driver) {
+          if (vehicle) {
             resetForm();
             store.commit("table/IS_UPDATE_TABLE");
             store.commit("sidepage/CLOSE_SIDE_PAGE");
