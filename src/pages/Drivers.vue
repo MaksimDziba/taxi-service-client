@@ -6,7 +6,12 @@
   >
   <a-divider />
 
-  <main-table :data="drivers" :columns="columns" :loading="loading" />
+  <main-table
+    :data="drivers"
+    :columns="columns"
+    :loading="loading"
+    side-page-type="create-driver"
+  />
 </template>
 
 <script lang="ts">

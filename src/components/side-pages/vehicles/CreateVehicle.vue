@@ -72,8 +72,8 @@
         :rules="[{ required: true, message: 'Обязательное поле!' }]"
       >
         <a-radio-group v-model:value="formData.babyChair">
-          <a-radio value="true">Да</a-radio>
-          <a-radio value="false">Нет</a-radio>
+          <a-radio :value="true">Да</a-radio>
+          <a-radio :value="false">Нет</a-radio>
         </a-radio-group>
       </a-form-item>
 
@@ -111,7 +111,7 @@
       </a-button>
 
       <a-button type="secondary" size="middle" @click="resetForm">
-        Отменить
+        Сбросить
       </a-button>
     </div>
   </div>
@@ -154,7 +154,7 @@ export default defineComponent({
 
     const formRef = ref<FormInstance>();
     const validForm = ref<boolean>(true);
-    const isEdit = Object.keys(props.data).length;
+    const isEdit = !!Object.keys(props.data).length;
 
     const options = ref<[] | { value: string }[]>([]);
     const capacityOptions = capacity;
