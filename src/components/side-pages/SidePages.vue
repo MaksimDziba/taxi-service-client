@@ -3,14 +3,14 @@
   <a-drawer
     v-else
     :title="sidePage.titleText"
-    :visible="$store.state.show"
+    :visible="visible"
     closable
     destroyOnClose
     placement="right"
     width="540"
     @close="handleClose"
   >
-    <component :is="$store.state.type" :data="sidePage.data" />
+    <component :is="type" :data="sidePage.data" />
   </a-drawer>
 </template>
 
@@ -42,16 +42,17 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const sidePageStore = store.state["sidepage"];
 
-    const sidePage = computed(() => sidePages[store.state.type]);
+    const sidePage = computed(() => sidePages[sidePageStore.type]);
 
     const handleClose = () => {
-      store.dispatch("closeSidePage");
+      store.commit("sidepage/CLOSE_SIDE_PAGE");
     };
 
     return {
-      type: computed(() => store.state.type),
-      visible: computed(() => store.state.show),
+      type: computed(() => sidePageStore.type),
+      visible: computed(() => sidePageStore.show),
       sidePage,
       handleClose,
     };

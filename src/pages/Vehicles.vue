@@ -1,16 +1,14 @@
 <template>
   <a-typography-title :level="3">Транспортные средства</a-typography-title>
 
-  <a-button type="primary" @click="sidePageCreateVehicle"
-    >Добавить транспорт</a-button
-  >
+  <a-button type="primary" @click="openSidePage">Добавить транспорт</a-button>
   <a-divider />
 
-  <main-table :data="vehicles" :columns="columns" />
+  <main-table :data="vehicles" :columns="columns" :loading="loading" />
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import MainTable from "../ui/table/Table.vue";
@@ -72,6 +70,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const isUpdateTable = computed(() => store.state.table.updateTable);
 
     const vehicles = ref<IVehicle[]>([]);
     const loading = ref(true);
@@ -92,14 +91,26 @@ export default defineComponent({
       }
     }
 
-    const sidePageCreateVehicle = () =>
-      store.dispatch("setSidePage", { type: "create-vehicle", show: true });
+    const openSidePage = () =>
+      store.commit("sidepage/SET_SIDE_PAGE", {
+        type: "create-vehicle",
+        show: true,
+      });
+
+    const handleUpdateTable = () => {
+      store.dispatch("table/updateTable");
+    };
+
+    watch(isUpdateTable, () => {
+      fetchVehicles();
+    });
 
     return {
       columns,
       vehicles,
       loading,
-      sidePageCreateVehicle,
+      openSidePage,
+      handleUpdateTable,
     };
   },
 });

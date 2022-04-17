@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs } from "vue";
+import { computed, defineComponent, reactive, toRefs } from "vue";
 import { debounce } from "lodash-es";
 
 import DriversService from "../../../api/drivers";
@@ -22,12 +22,21 @@ import DriversService from "../../../api/drivers";
 import { IDriver } from "../../../types/Driver";
 
 export default defineComponent({
-  setup() {
+  name: "SearchDrivers",
+  props: {
+    modelValue: Array,
+    default: () => [],
+  },
+  setup(props, { emit }) {
     let lastFetchId = 0;
+
+    const value = computed({
+      get: () => props.modelValue,
+      set: (value) => emit("update:modelValue", value),
+    });
 
     const state = reactive({
       data: [],
-      value: [],
       fetching: false,
     });
 
@@ -63,6 +72,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      value,
       fetchDrivers,
       handleChange,
     };

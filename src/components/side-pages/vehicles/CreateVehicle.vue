@@ -82,7 +82,10 @@
         name="maxCountPassenger"
         :rules="[{ required: true, message: 'Обязательное поле!' }]"
       >
-        <a-input v-model:value="formData.maxCountPassenger" />
+        <a-input
+          v-model:value="formData.maxCountPassenger"
+          placeholder="Заполнить поле"
+        />
       </a-form-item>
     </a-form>
 
@@ -92,10 +95,18 @@
 
     <a-divider />
 
-    <search-drivers v-model="formData.drivers" />
+    <search-drivers
+      :modelValue="formData.drivers"
+      @update:modelValue="formData.drivers = $event"
+    />
 
     <div class="side-page__footer">
-      <a-button type="primary" size="middle" @click="onSubmit">
+      <a-button
+        type="primary"
+        size="middle"
+        :disabled="validForm"
+        @click="onSubmit"
+      >
         Создать
       </a-button>
 
@@ -108,6 +119,8 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRaw } from "vue";
+
+import { useStore } from "vuex";
 
 // components
 import SearchDrivers from "./SearchDrivers.vue";
@@ -133,8 +146,10 @@ export default defineComponent({
   components: {
     SearchDrivers,
   },
-  setup(props, context) {
+  setup() {
+    const store = useStore();
     const formRef = ref<FormInstance>();
+    const validForm = ref<boolean>(true);
     const options = ref<[] | { value: string }[]>([]);
     const capacityOptions = capacity;
 
@@ -149,33 +164,44 @@ export default defineComponent({
       drivers: [],
     });
 
-    const handleValidate = (_, valid) => {
-      context.emit("is-valid", valid);
-    };
+    const onSubmit = async () => {
+      try {
+        const isValidForm = await formRef.value.validate();
 
-    const onSubmit = () => {
-      formRef.value
-        .validate()
-        .then(() => {
-          VehicleService.create(toRaw(formData));
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+        if (isValidForm) {
+          const driver = await VehicleService.create(toRaw(formData));
+
+          if (driver) {
+            resetForm();
+            store.commit("table/IS_UPDATE_TABLE");
+            store.commit("sidepage/CLOSE_SIDE_PAGE");
+          }
+        }
+      } catch (error) {
+        console.log(
+          "При создании транспортного средства произошла ошибка",
+          error
+        );
+      }
     };
 
     const resetForm = () => {
       formRef.value.resetFields();
     };
 
+    const handleValidate = (_, valid) => {
+      validForm.value = !valid;
+    };
+
     return {
       formRef,
       formData,
       capacityOptions,
-      handleValidate,
       onSubmit,
       resetForm,
       options,
+      validForm,
+      handleValidate,
     };
   },
 });
