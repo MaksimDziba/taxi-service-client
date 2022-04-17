@@ -6,13 +6,13 @@
   >
   <a-divider />
 
-  <main-table :data="drivers" :columns="columns" />
+  <main-table :data="drivers" :columns="columns" :loading="loading" />
 </template>
 
 <script lang="ts">
 import DriversService from "../api/drivers";
 
-import { defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import MainTable from "../ui/table/Table.vue";
@@ -80,6 +80,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const isUpdateTable = computed(() => store.state.table.updateTable);
 
     const drivers = ref<IDriver[]>([]);
     const loading = ref(true);
@@ -102,6 +103,10 @@ export default defineComponent({
 
     const sidePageCreateDriver = () =>
       store.dispatch("setSidePage", { type: "create-driver", show: true });
+
+    watch(isUpdateTable, () => {
+      fetchDrivers();
+    });
 
     return {
       columns,

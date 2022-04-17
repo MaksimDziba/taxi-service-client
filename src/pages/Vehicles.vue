@@ -97,10 +97,6 @@ export default defineComponent({
         show: true,
       });
 
-    const handleUpdateTable = () => {
-      store.dispatch("table/updateTable");
-    };
-
     watch(isUpdateTable, () => {
       fetchVehicles();
     });
@@ -110,7 +106,6 @@ export default defineComponent({
       vehicles,
       loading,
       openSidePage,
-      handleUpdateTable,
     };
   },
 });
