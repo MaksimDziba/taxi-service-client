@@ -89,8 +89,8 @@
         :rules="[{ required: true, message: 'Обязательное поле!' }]"
       >
         <a-radio-group v-model:value="formData.transportationAnimals">
-          <a-radio value="true">Да</a-radio>
-          <a-radio value="false">Нет</a-radio>
+          <a-radio :value="true">Да</a-radio>
+          <a-radio :value="false">Нет</a-radio>
         </a-radio-group>
       </a-form-item>
     </a-form>
@@ -106,7 +106,7 @@
       </a-button>
 
       <a-button type="secondary" size="middle" @click="resetForm">
-        Отменить
+        Сбросить
       </a-button>
     </div>
   </div>
@@ -132,7 +132,7 @@ export default defineComponent({
     const formRef = ref<FormInstance>();
     const validForm = ref<boolean>(true);
 
-    const isEdit = Object.keys(props.data).length;
+    const isEdit = !!Object.keys(props.data).length;
 
     const formData = reactive(
       isEdit
@@ -150,7 +150,7 @@ export default defineComponent({
     );
 
     const handleValidate = (_, valid) => {
-      emit("is-valid", valid);
+      validForm.value = !valid;
     };
 
     const fetchEditDriver = async (data) =>
