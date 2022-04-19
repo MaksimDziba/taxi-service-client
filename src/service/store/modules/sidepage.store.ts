@@ -11,6 +11,7 @@ export enum MT {
 const initialState = () => ({
   type: "",
   show: false,
+  data: {},
 })
 
 export default {
