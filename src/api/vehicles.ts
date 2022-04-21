@@ -17,8 +17,14 @@ class VehicleService {
     return apiClient.get(`/vehicles/${id}`);
   }
 
-  create(data: any): Promise<any> {
-    return apiClient.post("/vehicles", data);
+  async create(data: any): Promise<any> {
+    try {
+      const response = await apiClient.post("/vehicles", data);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`При создании ТС произошла ошибка: ${error}`);
+    }
   }
 
   update(id: any, data: any): Promise<any> {
@@ -27,10 +33,6 @@ class VehicleService {
 
   delete(id: any): Promise<any> {
     return apiClient.delete(`/vehicles/${id}`);
-  }
-
-  deleteAll(): Promise<any> {
-    return apiClient.delete(`/vehicles`);
   }
 
   findByTitle(title: string): Promise<any> {

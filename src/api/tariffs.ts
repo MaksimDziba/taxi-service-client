@@ -9,8 +9,8 @@ class TariffService {
       });
 
       return response.data || [];
-    } catch (err) {
-      throw new Error(`При получении тарифов произошла ошибка: ${err}`);
+    } catch (error) {
+      throw new Error(`При получении тарифов произошла ошибка: ${error}`);
     }
   }
 
@@ -18,8 +18,14 @@ class TariffService {
     return apiClient.get(`/tariffs/${id}`);
   }
 
-  create(data: any): Promise<any> {
-    return apiClient.post("/tariffs", data);
+  async create(data: any): Promise<any> {
+    try {
+      const response = await apiClient.post("/tariffs", data);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`При создании тарифов произошла ошибка: ${error}`);
+    }
   }
 
   update(id: any, data: any): Promise<any> {
@@ -28,10 +34,6 @@ class TariffService {
 
   delete(id: any): Promise<any> {
     return apiClient.delete(`/tariffs/${id}`);
-  }
-
-  deleteAll(): Promise<any> {
-    return apiClient.delete(`/tariffs`);
   }
 
   findByTitle(title: string): Promise<any> {

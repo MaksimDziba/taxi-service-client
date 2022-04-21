@@ -8,8 +8,8 @@ class DriverService {
       });
 
       return response.data || [];
-    } catch (err) {
-      throw new Error(`При получении водителей произошла ошибка: ${err}`);
+    } catch (error) {
+      throw new Error(`При получении водителей произошла ошибка: ${error}`);
     }
   }
 
@@ -17,8 +17,14 @@ class DriverService {
     return apiClient.get(`/drivers/${id}`);
   }
 
-  create(data: any): Promise<any> {
-    return apiClient.post("/drivers", data);
+  async create(data: any): Promise<any> {
+    try {
+      const response = await apiClient.post("/drivers", data);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`При создании водителя произошла ошибка: ${error}`);
+    }
   }
 
   update(id: any, data: any): Promise<any> {
@@ -27,10 +33,6 @@ class DriverService {
 
   delete(id: any): Promise<any> {
     return apiClient.delete(`/drivers/${id}`);
-  }
-
-  deleteAll(): Promise<any> {
-    return apiClient.delete(`/drivers`);
   }
 
   findByTitle(title: string): Promise<any> {

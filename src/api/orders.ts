@@ -17,8 +17,14 @@ class OrderService {
     return apiClient.get(`/orders/${id}`);
   }
 
-  create(data: any): Promise<any> {
-    return apiClient.post("/orders", data);
+  async create(data: any): Promise<any> {
+    try {
+      const response = await apiClient.post("/orders", data);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`При создании водителя произошла ошибка: ${error}`);
+    }
   }
 
   update(id: any, data: any): Promise<any> {
@@ -27,10 +33,6 @@ class OrderService {
 
   delete(id: any): Promise<any> {
     return apiClient.delete(`/orders/${id}`);
-  }
-
-  deleteAll(): Promise<any> {
-    return apiClient.delete(`/orders`);
   }
 
   findByTitle(title: string): Promise<any> {
