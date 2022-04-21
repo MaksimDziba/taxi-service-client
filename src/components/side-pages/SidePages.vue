@@ -22,6 +22,7 @@ import { useStore } from "vuex";
 import CreateDriver from "./drivers/CreateDriver.vue";
 import CreateVehicle from "./vehicles/CreateVehicle.vue";
 import CreateTariff from "./tariffs/CreateTariff.vue";
+import CreateClient from "./clients/CreateClient.vue";
 
 const sidePages = {
   "create-driver": {
@@ -39,6 +40,11 @@ const sidePages = {
     component: "CreateTariff",
     data: {},
   },
+  "create-client": {
+    titleText: "Добавить клиента",
+    component: "CreateClient",
+    data: {},
+  },
 };
 
 export default defineComponent({
@@ -46,6 +52,7 @@ export default defineComponent({
     CreateDriver,
     CreateVehicle,
     CreateTariff,
+    CreateClient,
   },
   setup() {
     const store = useStore();
