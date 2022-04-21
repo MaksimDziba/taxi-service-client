@@ -14,11 +14,11 @@ class TariffService {
     }
   }
 
-  get(id: any): Promise<any> {
+  get(id: number): Promise<ITariff> {
     return apiClient.get(`/tariffs/${id}`);
   }
 
-  async create(data: any): Promise<any> {
+  async create(data: ITariff): Promise<ITariff> {
     try {
       const response = await apiClient.post("/tariffs", data);
 
@@ -28,15 +28,21 @@ class TariffService {
     }
   }
 
-  update(id: any, data: any): Promise<any> {
+  update(id: number, data: ITariff): Promise<ITariff> {
     return apiClient.put(`/tariffs/${id}`, data);
   }
 
-  delete(id: any): Promise<any> {
-    return apiClient.delete(`/tariffs/${id}`);
+  async delete(id: number): Promise<ITariff> {
+    try {
+      const response = await apiClient.delete(`/tariffs/${id}`);
+
+      return response.data;
+    } catch (error) {
+      throw new Error(`При удалении тарифов произошла ошибка: ${error}`);
+    }
   }
 
-  findByTitle(title: string): Promise<any> {
+  findByTitle(title: string): Promise<ITariff[]> {
     return apiClient.get(`/tariffs?title=${title}`);
   }
 }

@@ -86,13 +86,23 @@
         type="primary"
         size="middle"
         :disabled="validForm"
-        @click="onSubmit"
+        @click="handleSubmit"
       >
         Создать
       </a-button>
 
       <a-button type="secondary" size="middle" @click="resetForm">
         Сбросить
+      </a-button>
+
+      <a-button
+        v-if="isEdit"
+        class="btn__delete"
+        type="danger"
+        size="middle"
+        @click="handleDelete"
+      >
+        Удалить
       </a-button>
     </div>
   </div>
@@ -133,31 +143,39 @@ export default defineComponent({
           }
     );
 
-    const handleValidate = (_, valid) => {
-      validForm.value = !valid;
-    };
-
     const fetchEditTariff = (data) => TariffService.update(data.id, data);
 
     const fetchCreateTariff = (data) => TariffService.create(data);
 
-    const onSubmit = async () => {
+    const handleValidate = (_, valid) => {
+      validForm.value = !valid;
+    };
+
+    const handleSubmit = async () => {
       try {
         const isValidForm = await formRef.value.validate();
 
         if (isValidForm) {
-          const tariff = isEdit
+          isEdit
             ? await fetchEditTariff(toRaw(formData))
             : await fetchCreateTariff(toRaw(formData));
-
-          if (tariff) {
-            resetForm();
-            store.commit("table/IS_UPDATE_TABLE");
-            store.commit("sidepage/CLOSE_SIDE_PAGE");
-          }
         }
-      } catch (error) {
-        console.log("При создании тарифа произошла ошибка", error);
+      } finally {
+        resetForm();
+        store.commit("table/IS_UPDATE_TABLE");
+        store.commit("sidepage/CLOSE_SIDE_PAGE");
+      }
+    };
+
+    const handleDelete = async () => {
+      try {
+        const tariff = await TariffService.delete(formData.id);
+
+        if (tariff) {
+          store.commit("table/IS_UPDATE_TABLE");
+        }
+      } finally {
+        store.commit("sidepage/CLOSE_SIDE_PAGE");
       }
     };
 
@@ -169,9 +187,11 @@ export default defineComponent({
       formRef,
       formData,
       handleValidate,
-      onSubmit,
+      handleSubmit,
+      handleDelete,
       resetForm,
       validForm,
+      isEdit,
     };
   },
 });
@@ -185,10 +205,15 @@ export default defineComponent({
 }
 
 .side-page__footer {
+  display: flex;
   margin-top: auto;
 }
 
 .side-page__footer button {
   margin-left: 10px;
+}
+
+.side-page__footer .btn__delete {
+  margin-left: auto;
 }
 </style>

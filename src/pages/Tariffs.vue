@@ -10,7 +10,7 @@
     :data="tariffs"
     :columns="columns"
     :loading="loading"
-    side-page-type="create-order"
+    side-page-type="create-tariff"
   />
 </template>
 
