@@ -23,7 +23,7 @@ class OrderService {
 
       return response.data;
     } catch (error) {
-      throw new Error(`При создании водителя произошла ошибка: ${error}`);
+      throw new Error(`При создании заказа произошла ошибка: ${error}`);
     }
   }
 

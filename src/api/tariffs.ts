@@ -24,7 +24,7 @@ class TariffService {
 
       return response.data;
     } catch (error) {
-      throw new Error(`При создании тарифов произошла ошибка: ${error}`);
+      throw new Error(`При создании тарифа произошла ошибка: ${error}`);
     }
   }
 
@@ -38,7 +38,7 @@ class TariffService {
 
       return response.data;
     } catch (error) {
-      throw new Error(`При удалении тарифов произошла ошибка: ${error}`);
+      throw new Error(`При удалении тарифа произошла ошибка: ${error}`);
     }
   }
 

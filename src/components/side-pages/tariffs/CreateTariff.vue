@@ -128,7 +128,7 @@ export default defineComponent({
     const formRef = ref<FormInstance>();
     const validForm = ref<boolean>(true);
 
-    const isEdit = !!Object.keys(props.data).length;
+    const isEdit = !!props.data?.id;
 
     const formData = reactive(
       isEdit
