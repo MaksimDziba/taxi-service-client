@@ -137,28 +137,27 @@ export default defineComponent({
       validForm.value = !valid;
     };
 
-    const fetchEditTariff = async (data) =>
-      await TariffService.update(data.id, data);
+    const fetchEditTariff = (data) => TariffService.update(data.id, data);
 
-    const fetchCreateTariff = async (data) => await TariffService.create(data);
+    const fetchCreateTariff = (data) => TariffService.create(data);
 
     const onSubmit = async () => {
       try {
         const isValidForm = await formRef.value.validate();
 
         if (isValidForm) {
-          const Tariff = isEdit
-            ? fetchEditTariff(toRaw(formData))
-            : fetchCreateTariff(toRaw(formData));
+          const tariff = isEdit
+            ? await fetchEditTariff(toRaw(formData))
+            : await fetchCreateTariff(toRaw(formData));
 
-          if (Tariff) {
+          if (tariff) {
             resetForm();
             store.commit("table/IS_UPDATE_TABLE");
             store.commit("sidepage/CLOSE_SIDE_PAGE");
           }
         }
       } catch (error) {
-        console.log("При создании водителя произошла ошибка", error);
+        console.log("При создании тарифа произошла ошибка", error);
       }
     };
 

@@ -151,17 +151,17 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore();
-
     const formRef = ref<FormInstance>();
     const validForm = ref<boolean>(true);
-    const isEdit = !!Object.keys(props.data).length;
 
     const options = ref<[] | { value: string }[]>([]);
     const capacityOptions = capacity;
 
+    const isEdit = !!props.data?.id;
+
     const formData = reactive(
       isEdit
-        ? props.data
+        ? toRaw(props.data)
         : {
             gosNumber: "",
             dateManufacture: "",
@@ -174,10 +174,9 @@ export default defineComponent({
           }
     );
 
-    const fetchEditVehicle = async (data) =>
-      await VehicleService.update(data.id, data);
-    const fetchCreateVehicle = async (data) =>
-      await VehicleService.create(data);
+    const fetchEditVehicle = (data) => VehicleService.update(data.id, data);
+
+    const fetchCreateVehicle = (data) => VehicleService.create(data);
 
     const onSubmit = async () => {
       try {
@@ -185,8 +184,8 @@ export default defineComponent({
 
         if (isValidForm) {
           const vehicle = isEdit
-            ? fetchEditVehicle(toRaw(formData))
-            : fetchCreateVehicle(toRaw(formData));
+            ? await fetchEditVehicle(toRaw(formData))
+            : await fetchCreateVehicle(toRaw(formData));
 
           if (vehicle) {
             resetForm();

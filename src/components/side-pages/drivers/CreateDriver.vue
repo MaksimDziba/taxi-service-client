@@ -132,7 +132,7 @@ export default defineComponent({
     const formRef = ref<FormInstance>();
     const validForm = ref<boolean>(true);
 
-    const isEdit = !!Object.keys(props.data).length;
+    const isEdit = !!props.data?.id;
 
     const formData = reactive(
       isEdit
@@ -153,9 +153,8 @@ export default defineComponent({
       validForm.value = !valid;
     };
 
-    const fetchEditDriver = async (data) =>
-      await DriverService.update(data.id, data);
-    const fetchCreateDriver = async (data) => await DriverService.create(data);
+    const fetchEditDriver = (data) => DriverService.update(data.id, data);
+    const fetchCreateDriver = (data) => DriverService.create(data);
 
     const onSubmit = async () => {
       try {
@@ -163,8 +162,8 @@ export default defineComponent({
 
         if (isValidForm) {
           const driver = isEdit
-            ? fetchEditDriver(toRaw(formData))
-            : fetchCreateDriver(toRaw(formData));
+            ? await fetchEditDriver(toRaw(formData))
+            : await fetchCreateDriver(toRaw(formData));
 
           if (driver) {
             resetForm();
