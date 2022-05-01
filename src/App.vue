@@ -18,3 +18,7 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="sass">
+@import "./assets/style/main.scss"
+</style>
