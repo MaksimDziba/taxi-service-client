@@ -107,11 +107,21 @@
         :disabled="validForm"
         @click="onSubmit"
       >
-        Создать
+        {{ isEdit ? "Сохранить" : "Создать" }}
       </a-button>
 
       <a-button type="secondary" size="middle" @click="resetForm">
         Сбросить
+      </a-button>
+
+      <a-button
+        v-if="isEdit"
+        class="btn__delete"
+        type="danger"
+        size="middle"
+        @click="handleDelete"
+      >
+        Удалить
       </a-button>
     </div>
   </div>
@@ -209,32 +219,30 @@ export default defineComponent({
       validForm.value = !valid;
     };
 
+    const handleDelete = async () => {
+      try {
+        const vehicle = await VehicleService.delete(formData.id);
+
+        if (vehicle) {
+          store.commit("table/IS_UPDATE_TABLE");
+        }
+      } finally {
+        store.commit("sidepage/CLOSE_SIDE_PAGE");
+      }
+    };
+
     return {
+      isEdit,
+      capacityOptions,
       formRef,
       formData,
-      capacityOptions,
+      handleValidate,
+      handleDelete,
+      options,
       onSubmit,
       resetForm,
-      options,
       validForm,
-      handleValidate,
     };
   },
 });
 </script>
-
-<style scoped>
-.side-page__with-footer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.side-page__footer {
-  margin-top: auto;
-}
-
-.side-page__footer button {
-  margin-left: 10px;
-}
-</style>

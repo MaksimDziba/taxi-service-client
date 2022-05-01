@@ -36,7 +36,7 @@
         :disabled="validForm"
         @click="handleSubmit"
       >
-        Создать
+        {{ isEdit ? "Сохранить" : "Создать" }}
       </a-button>
 
       <a-button type="secondary" size="middle" @click="resetForm">

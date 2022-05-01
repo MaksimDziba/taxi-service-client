@@ -23,6 +23,7 @@ import CreateDriver from "./drivers/CreateDriver.vue";
 import CreateVehicle from "./vehicles/CreateVehicle.vue";
 import CreateTariff from "./tariffs/CreateTariff.vue";
 import CreateClient from "./clients/CreateClient.vue";
+import CreateOrder from "./orders/CreateOrder.vue";
 
 const sidePages = {
   "create-driver": {
@@ -45,6 +46,11 @@ const sidePages = {
     component: "CreateClient",
     data: {},
   },
+  "create-order": {
+    titleText: "Добавить заказ",
+    component: "CreateOrder",
+    data: {},
+  },
 };
 
 export default defineComponent({
@@ -53,6 +59,7 @@ export default defineComponent({
     CreateVehicle,
     CreateTariff,
     CreateClient,
+    CreateOrder,
   },
   setup() {
     const store = useStore();

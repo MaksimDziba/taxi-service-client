@@ -102,11 +102,21 @@
         :disabled="validForm"
         @click="onSubmit"
       >
-        Создать
+        {{ isEdit ? "Сохранить" : "Создать" }}
       </a-button>
 
       <a-button type="secondary" size="middle" @click="resetForm">
         Сбросить
+      </a-button>
+
+      <a-button
+        v-if="isEdit"
+        class="btn__delete"
+        type="danger"
+        size="middle"
+        @click="handleDelete"
+      >
+        Удалить
       </a-button>
     </div>
   </div>
@@ -180,10 +190,24 @@ export default defineComponent({
       formRef.value.resetFields();
     };
 
+    const handleDelete = async () => {
+      try {
+        const tariff = await DriverService.delete(formData.id);
+
+        if (tariff) {
+          store.commit("table/IS_UPDATE_TABLE");
+        }
+      } finally {
+        store.commit("sidepage/CLOSE_SIDE_PAGE");
+      }
+    };
+
     return {
+      isEdit,
       formRef,
       formData,
       handleValidate,
+      handleDelete,
       onSubmit,
       resetForm,
       validForm,
@@ -191,19 +215,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.side-page__with-footer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.side-page__footer {
-  margin-top: auto;
-}
-
-.side-page__footer button {
-  margin-left: 10px;
-}
-</style>

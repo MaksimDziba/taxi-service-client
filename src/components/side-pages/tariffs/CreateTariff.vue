@@ -88,7 +88,7 @@
         :disabled="validForm"
         @click="handleSubmit"
       >
-        Создать
+        {{ isEdit ? "Сохранить" : "Создать" }}
       </a-button>
 
       <a-button type="secondary" size="middle" @click="resetForm">
@@ -196,24 +196,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.side-page__with-footer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.side-page__footer {
-  display: flex;
-  margin-top: auto;
-}
-
-.side-page__footer button {
-  margin-left: 10px;
-}
-
-.side-page__footer .btn__delete {
-  margin-left: auto;
-}
-</style>
