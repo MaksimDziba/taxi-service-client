@@ -1,9 +1,9 @@
 <template>
   <a-select
     v-model:value="value"
-    mode="multiple"
-    style="width: 100%"
     placeholder="Начните вводит ФИО водителя"
+    style="width: 100%"
+    mode="multiple"
     allow-clear
     :filter-option="false"
     :options="data"
@@ -17,9 +17,9 @@
 import { computed, defineComponent, reactive, toRefs } from "vue";
 import { debounce } from "lodash-es";
 
-import DriversService from "../../../api/drivers";
+import DriversService from "../../api/drivers";
 
-import { IDriver } from "../../../types/Driver";
+import { IDriver } from "../../types/Driver";
 
 export default defineComponent({
   name: "SearchDrivers",

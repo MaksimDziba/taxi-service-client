@@ -133,7 +133,7 @@ import { defineComponent, reactive, ref, toRaw } from "vue";
 import { useStore } from "vuex";
 
 // components
-import SearchDrivers from "./SearchDrivers.vue";
+import SearchDrivers from "../../search-fields/SearchDrivers.vue";
 
 // interface
 import type { FormInstance } from "ant-design-vue";

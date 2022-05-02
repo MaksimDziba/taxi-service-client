@@ -1,3 +1,14 @@
+// ant custom
+// side menu
+.ant-menu-item-selected a:hover {
+  color: #d4d4d4;
+}
+
+// timepicker
+.ant-picker {
+  width: 100%;
+}
+
 .header-table {
   background-color: black;
 }
@@ -5,7 +16,7 @@
 .side-page__with-footer {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: auto;
 }
 
 .side-page__footer {
@@ -15,6 +26,10 @@
 
 .side-page__footer button {
   margin-left: 12px;
+
+  &:first-child {
+    margin-left: 0;
+  }
 }
 
 .side-page__footer {

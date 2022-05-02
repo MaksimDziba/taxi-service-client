@@ -1,5 +1,5 @@
 export interface IOrder {
-  id: number;
+  id?: number;
 
   addressFrom: string;
 
@@ -12,4 +12,8 @@ export interface IOrder {
   preOrderCost: number;
 
   operatorName: string;
+
+  tariffID: number;
+
+  clientID: number;
 }

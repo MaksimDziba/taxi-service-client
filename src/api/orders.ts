@@ -1,25 +1,17 @@
 import apiClient from "./http/axios-client";
+import IOrder from "../types/Order";
 
 class OrderService {
-  async getAll(params: object): Promise<IOrder[]> | [] {
+  async create(data: IOrder): Promise<IOrder> {
     try {
-      const response = await apiClient.get("/orders", {
-        params,
+      const { clientID, tariffID, ...orderData } = data;
+
+      const response = await apiClient.post("/orders", {
+        clientID: clientID[0],
+        tariffID: tariffID[0],
+        ...orderData,
       });
-
-      return response.data || [];
-    } catch (err) {
-      throw new Error(`При получении заказов произошла ошибка: ${err}`);
-    }
-  }
-
-  get(id: any): Promise<any> {
-    return apiClient.get(`/orders/${id}`);
-  }
-
-  async create(data: any): Promise<any> {
-    try {
-      const response = await apiClient.post("/orders", data);
+      console.log("🚀 ~ OrderService ~ create ~ response", response);
 
       return response.data;
     } catch (error) {
@@ -37,6 +29,22 @@ class OrderService {
 
   findByTitle(title: string): Promise<any> {
     return apiClient.get(`/orders?title=${title}`);
+  }
+
+  async getAll(params: object): Promise<IOrder[]> | [] {
+    try {
+      const response = await apiClient.get("/orders", {
+        params,
+      });
+
+      return response.data || [];
+    } catch (err) {
+      throw new Error(`При получении заказов произошла ошибка: ${err}`);
+    }
+  }
+
+  get(id: any): Promise<any> {
+    return apiClient.get(`/orders/${id}`);
   }
 }
 

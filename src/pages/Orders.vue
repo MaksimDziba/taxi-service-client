@@ -1,7 +1,7 @@
 <template>
   <a-typography-title :level="3">Заказы</a-typography-title>
 
-  <a-button type="primary" @click="sidePageCreateDriver"
+  <a-button type="primary" @click="sidePageCreateOrders"
     >Добавить заказ</a-button
   >
   <a-divider />
@@ -33,47 +33,55 @@ const columns = [
     key: "id",
   },
   {
-    title: "ФИО",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Адрес",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Телефон",
-    dataIndex: "phone",
+    title: "Клиент",
+    dataIndex: ["client", "phone"],
     key: "phone",
   },
   {
-    title: "Паспорт",
-    dataIndex: "passport",
-    key: "passport",
+    title: "Местонахождения",
+    dataIndex: "addressFrom",
+    key: "addressFrom",
   },
   {
-    title: "Вод. удостоверение",
-    dataIndex: "driverLicense",
-    key: "driverLicense",
+    title: "Куда поедет",
+    dataIndex: "addressTo",
+    key: "addressTo",
   },
   {
-    title: "Номер договора",
-    dataIndex: "contractNumber",
-    key: "contractNumber",
-    slots: {
-      title: "contractNumber",
-    },
+    title: "Время подачи",
+    dataIndex: "timeOrder",
+    key: "timeOrder",
+    align: "center",
+    slots: { customRender: "date" },
   },
   {
-    title: "Способ оплаты",
-    dataIndex: "paymentMethod",
-    key: "paymentMethod",
+    title: "Кол-во пассажиров",
+    dataIndex: "maxCountPassenger",
+    key: "maxCountPassenger",
+    align: "center",
   },
   {
-    title: "Транспортировка животных",
+    title: "Начальная цена",
+    dataIndex: "preOrderCost",
+    key: "preOrderCost",
+    align: "center",
+  },
+  {
+    title: "Оператор",
+    dataIndex: "operatorName",
+    key: "operatorName",
+  },
+  {
+    title: "Перевозка дом. животных",
     dataIndex: "transportationAnimals",
     key: "transportationAnimals",
+    align: "center",
+    slots: { customRender: "checkbox", props: { disabled: true } },
+  },
+  {
+    title: "Детское кресло",
+    dataIndex: "babyChair",
+    key: "babyChair",
     align: "center",
     slots: { customRender: "checkbox", props: { disabled: true } },
   },
