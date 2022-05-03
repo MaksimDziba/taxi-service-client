@@ -1,18 +1,18 @@
 <template>
   <a-auto-complete
     v-model:value="address"
-    :options="data"
     style="width: 100%"
     placeholder="Начните вводит адрес"
     allow-clear
+    :options="findOptions"
     :filter-option="false"
     :not-found-content="fetching ? undefined : null"
     @search="fetchAddress"
-    @select="onSelect"
+    @select="handleSelect"
   />
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive, ref, toRefs } from "vue";
+import { computed, defineComponent, reactive, toRefs } from "vue";
 import { debounce } from "lodash-es";
 
 import GeoService from "../../api/geo";
@@ -31,7 +31,7 @@ export default defineComponent({
     });
 
     const state = reactive({
-      data: [],
+      findOptions: [],
       fetching: false,
     });
 
@@ -42,29 +42,29 @@ export default defineComponent({
 
       state.fetching = true;
 
-      const addressList = await GeoService.fetchAddresses(value);
+      const address = await GeoService.fetchAddresses(value);
 
       if (fetchId !== lastFetchId) {
         // for fetch callback order
         return;
       }
 
-      const data = addressList.map((item) => ({
+      const data = address.map((item) => ({
         label: item.value,
         value: item.value,
       }));
 
-      state.data = data;
+      state.findOptions = data;
       state.fetching = false;
     }, 1000);
 
-    const onSelect = (value: string) => {
+    const handleSelect = (value: string) => {
       emit("update:modelValue", value);
     };
 
     return {
       address,
-      onSelect,
+      handleSelect,
       fetchAddress,
       ...toRefs(state),
     };

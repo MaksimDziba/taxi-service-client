@@ -5,7 +5,7 @@ export interface IDriver {
 
   driverLicense: string;
 
-  id: number;
+  id?: number;
 
   name: string;
 
