@@ -14,8 +14,13 @@
     <template v-slot:checkbox="{ value, record, column }">
       <a-checkbox :checked="value" :disabled="column.slots.props.disabled" />
     </template>
+
     <template v-slot:date="{ value, record, column }">
-      {{ new Date(value).toLocaleDateString() }}
+      {{ value ? new Date(value).toLocaleDateString() : "" }}
+    </template>
+
+    <template v-slot:time="{ value, record, column }">
+      {{ getTime(value) }}
     </template>
   </a-table>
 </template>
@@ -45,7 +50,17 @@ export default defineComponent({
       }
     };
 
-    return { onSelect };
+    const getTime = (value) => {
+      if (!value) {
+        return "";
+      }
+
+      const date = new Date(value);
+
+      return `${date.getHours()}:${date.getMinutes()}`;
+    };
+
+    return { onSelect, getTime };
   },
 });
 </script>

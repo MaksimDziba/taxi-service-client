@@ -9,13 +9,14 @@
       @validate="handleValidate"
     >
       <a-form-item
-        label="ФИО клиента"
-        name="clientID"
+        label="Телефон клиента"
+        name="client"
         :rules="[{ required: true, message: 'Обязательное поле!' }]"
       >
         <search-clients
-          :modelValue="formData.clientID"
-          @update:modelValue="formData.clientID = [$event[0]]"
+          :is-disabled="isEdit"
+          v-model:id="formData.clientID"
+          v-model:phone="formData.client.phone"
         />
       </a-form-item>
 
@@ -25,8 +26,9 @@
         :rules="[{ required: true, message: 'Обязательное поле!' }]"
       >
         <search-tariffs
+          :item="formData.tariff"
           :modelValue="formData.tariffID"
-          @update:modelValue="formData.tariffID = [$event]"
+          @update:modelValue="formData.tariffID = $event"
         />
       </a-form-item>
 
@@ -142,6 +144,7 @@ import { useStore } from "vuex";
 
 // interface
 import type { FormInstance } from "ant-design-vue";
+import { IOrder } from "../../../types/Order";
 
 // api
 import OrderService from "../../../api/orders";
@@ -161,7 +164,7 @@ export default defineComponent({
     SearchAddress,
   },
   props: {
-    data: Object,
+    data: Object as () => IOrder,
   },
   setup(props) {
     const store = useStore();
@@ -172,25 +175,23 @@ export default defineComponent({
 
     const isEdit = !!props.data?.id;
 
-    const formData = reactive(
+    const formData: IOrder = reactive(
       isEdit
-        ? {
-            ...toRaw(props.data),
-            clientID: [props.data.client.name],
-            tariffID: [props.data.tariff.type],
-          }
+        ? { ...props.data }
         : {
-            id: null,
-            clientID: [],
-            tariffID: [],
             addressFrom: "",
             addressTo: "",
-            timeOrder: new Date(),
+            timeOrder: null,
             maxCountPassenger: null,
             preOrderCost: 0,
             transportationAnimals: false,
             babyChair: false,
             operatorName: "",
+            clientID: null,
+            tariffID: null,
+            client: {
+              phone: "",
+            },
           }
     );
 

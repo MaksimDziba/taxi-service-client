@@ -4,14 +4,7 @@ import IOrder from "../types/Order";
 class OrderService {
   async create(data: IOrder): Promise<IOrder> {
     try {
-      const { clientID, tariffID, ...orderData } = data;
-
-      const response = await apiClient.post("/orders", {
-        clientID: clientID[0],
-        tariffID: tariffID[0],
-        ...orderData,
-      });
-      console.log("🚀 ~ OrderService ~ create ~ response", response);
+      const response = await apiClient.post("/orders", data);
 
       return response.data;
     } catch (error) {

@@ -2,7 +2,7 @@ import ITariff from "./Tariff";
 import IClient from "./Client";
 
 interface IOrder {
-  id: number;
+  id?: number;
 
   addressFrom: string;
 
@@ -20,13 +20,13 @@ interface IOrder {
 
   operatorName: string;
 
-  tariffID: number;
+  tariffID?: number;
 
-  tariff: ITariff;
+  tariff?: ITariff;
 
-  clientID: number;
+  clientID?: number;
 
-  client: IClient;
+  client?: IClient;
 }
 
 export { IOrder };

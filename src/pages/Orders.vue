@@ -52,7 +52,7 @@ const columns = [
     dataIndex: "timeOrder",
     key: "timeOrder",
     align: "center",
-    slots: { customRender: "date" },
+    slots: { customRender: "time" },
   },
   {
     title: "Кол-во пассажиров",

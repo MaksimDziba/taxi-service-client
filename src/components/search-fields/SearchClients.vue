@@ -1,21 +1,22 @@
 <template>
-  <a-select
-    v-model:value="value"
-    placeholder="Начните вводит телефон клиента"
-    mode="tags"
+  <a-auto-complete
+    v-model:value="phone"
     style="width: 100%"
+    placeholder="Начните вводит телефон клиента"
     allow-clear
     showSearch
     :filter-option="false"
-    :options="data"
+    :options="findOptions"
     :not-found-content="fetching ? undefined : null"
-    @search="fetchClients"
-    @change="handleChange"
-  ></a-select>
+    :disabled="isDisabled"
+    @search="fetchData"
+    @select="onSelect"
+    @change="onChange"
+  />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 import { debounce } from "lodash-es";
 
 import ClientsService from "../../api/clients";
@@ -25,31 +26,39 @@ import { IClient } from "../../types/Client";
 export default defineComponent({
   name: "SearchClients",
   props: {
-    modelValue: Array,
-    default: () => [],
+    id: Number,
+    phone: String,
+    isDisabled: Boolean,
   },
   setup(props, { emit }) {
     let lastFetchId = 0;
 
-    const value = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
+    const phone = ref(props.phone || "");
 
     const state = reactive({
-      data: [],
+      findOptions: [],
       fetching: false,
     });
 
-    const fetchClients = debounce(async (value: string) => {
+    onMounted(async () => {
+      if (props.id) {
+        state.findOptions = [
+          {
+            label: props.phone,
+            value: props.id,
+          },
+        ];
+      }
+    });
+
+    const fetchData = debounce(async (value: string) => {
       lastFetchId += 1;
 
       const fetchId = lastFetchId;
 
-      state.data = [];
       state.fetching = true;
 
-      const clients: [] | IClient[] = await ClientsService.getAll({
+      const response: [] | IClient[] = await ClientsService.getAll({
         search: value,
       });
 
@@ -58,23 +67,41 @@ export default defineComponent({
         return;
       }
 
-      const data = clients.map((client) => ({
-        label: client.name,
+      const data = response.map((client) => ({
+        label: client.phone,
         value: client.id,
       }));
 
-      state.data = data;
+      state.findOptions = data;
       state.fetching = false;
-    }, 500);
+    }, 1000);
 
-    const handleChange = (value: string) => {
-      console.log(`selected ${value}`);
+    const onSelect = (value, option) => {
+      if (value) {
+        phone.value = option.label;
+
+        emit("update:id", value);
+        emit("update:phone", option.label);
+      }
+    };
+
+    const onChange = (value, option) => {
+      const isPhone = !Object.keys(option).length;
+
+      if (isPhone) {
+        phone.value = value;
+
+        emit("update:id", null);
+        emit("update:phone", value);
+      }
     };
 
     return {
-      value,
-      fetchClients,
-      handleChange,
+      phone,
+      fetchData,
+      onSelect,
+      onChange,
+      isDisabled: props.isDisabled,
       ...toRefs(state),
     };
   },

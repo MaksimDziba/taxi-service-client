@@ -14,8 +14,10 @@ class ClientService {
     }
   }
 
-  get(id: number): Promise<IClient> {
-    return apiClient.get(`/clients/${id}`);
+  async get(id: number): Promise<IClient> {
+    const response = await apiClient.get(`/clients/${id}`);
+
+    return response.data || {};
   }
 
   async create(data: IClient): Promise<IClient> {

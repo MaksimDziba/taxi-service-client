@@ -6,14 +6,14 @@
     showSearch
     allow-clear
     :filter-option="false"
-    :options="data"
+    :options="findOptions"
     :not-found-content="fetching ? undefined : null"
-    @search="fetchTariffs"
+    @search="fetchData"
   ></a-select>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import { debounce } from "lodash-es";
 
 import TariffsService from "../../api/tariffs";
@@ -23,8 +23,7 @@ import { ITariff } from "../../types/Tariff";
 export default defineComponent({
   name: "SearchTariffs",
   props: {
-    modelValue: Array,
-    default: () => [],
+    modelValue: Number,
   },
   setup(props, { emit }) {
     let lastFetchId = 0;
@@ -35,19 +34,18 @@ export default defineComponent({
     });
 
     const state = reactive({
-      data: [],
+      findOptions: [],
       fetching: false,
     });
 
-    const fetchTariffs = debounce(async (value: string) => {
+    const fetchData = debounce(async (value: string) => {
       lastFetchId += 1;
 
       const fetchId = lastFetchId;
 
-      state.data = [];
       state.fetching = true;
 
-      const tariffs: [] | ITariff[] = await TariffsService.getAll({
+      const response: [] | ITariff[] = await TariffsService.getAll({
         search: value,
       });
 
@@ -56,19 +54,19 @@ export default defineComponent({
         return;
       }
 
-      const data = tariffs.map((tariff) => ({
+      const data = response.map((tariff) => ({
         label: tariff.type,
         value: tariff.id,
       }));
 
-      state.data = data;
+      state.findOptions = data;
       state.fetching = false;
-    }, 500);
+    }, 1000);
 
     return {
-      ...toRefs(state),
       value,
-      fetchTariffs,
+      fetchData,
+      ...toRefs(state),
     };
   },
 });
