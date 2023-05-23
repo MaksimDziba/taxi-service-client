@@ -22,6 +22,10 @@
     <template v-slot:time="{ value, record, column }">
       {{ getTime(value) }}
     </template>
+
+    <template v-slot:statusOrder="{ value, record, column }">
+      <div :class="`table-status status-${value}`" />
+    </template>
   </a-table>
 </template>
 

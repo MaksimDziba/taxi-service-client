@@ -37,3 +37,18 @@
     margin-left: auto;
   }
 }
+
+// STATUS
+.table-status {
+  margin: auto;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 10px;
+
+  &.status {
+    &-pending {
+      background-color: orange;
+    }
+  }
+}

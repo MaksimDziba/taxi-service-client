@@ -199,6 +199,7 @@ export default defineComponent({
 
           if (vehicle) {
             resetForm();
+
             store.commit("table/IS_UPDATE_TABLE");
             store.commit("sidepage/CLOSE_SIDE_PAGE");
           }

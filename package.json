@@ -1,6 +1,7 @@
 {
   "name": "taxi-service",
   "private": true,
+  "main": "main.js",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
@@ -10,14 +11,15 @@
   },
   "dependencies": {
     "ant-design-vue": "^3.1.1",
-    "axios": "^0.26.0",
     "lodash": "^4.17.21",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",
+    "vue3-charts": "^1.1.33",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.2.0",
+    "axios": "^1.2.1",
     "electron": "^17.0.0",
     "sass": "^1.50.0",
     "unplugin-vue-components": "^0.17.18",

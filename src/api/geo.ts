@@ -1,7 +1,7 @@
 import apiClient from "./http/axios-client";
 
 class GeoService {
-  async fetchAddresses(place) {
+  async fetchAddresses(query) {
     const key = import.meta.env.VITE_DADATA_TOKEN;
     const url =
       "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
@@ -9,7 +9,11 @@ class GeoService {
     try {
       const response = await apiClient.post(
         url,
-        JSON.stringify({ query: place }),
+        JSON.stringify({ 
+          count: 5,
+          locations: { kladr_id: "37" },
+          query, 
+        }),
         {
           headers: {
             "Content-Type": "application/json",

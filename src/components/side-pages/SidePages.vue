@@ -54,6 +54,7 @@ const sidePages = {
 };
 
 export default defineComponent({
+  name: "SidePages",
   components: {
     CreateDriver,
     CreateVehicle,

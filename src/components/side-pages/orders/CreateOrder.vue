@@ -11,7 +11,7 @@
       <a-form-item
         label="Телефон клиента"
         name="client"
-        :rules="[{ required: true, message: 'Обязательное поле!' }]"
+        :rules="rules.required"
       >
         <search-clients
           :is-disabled="isEdit"
@@ -23,7 +23,7 @@
       <a-form-item
         label="Тариф"
         name="tariffID"
-        :rules="[{ required: true, message: 'Обязательное поле!' }]"
+        :rules="rules.required"
       >
         <search-tariffs
           :item="formData.tariff"
@@ -37,7 +37,7 @@
       <a-form-item
         label="Местонахождения"
         name="addressFrom"
-        :rules="[{ required: true, message: 'Обязательное поле!' }]"
+        :rules="rules.required"
       >
         <search-address
           :modelValue="formData.addressFrom"
@@ -48,7 +48,7 @@
       <a-form-item
         label="Куда поедет"
         name="addressTo"
-        :rules="[{ required: true, message: 'Обязательное поле!' }]"
+        :rules="rules.required"
       >
         <search-address
           :modelValue="formData.addressTo"
@@ -139,7 +139,6 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRaw } from "vue";
-
 import { useStore } from "vuex";
 
 // interface
@@ -192,6 +191,7 @@ export default defineComponent({
             client: {
               phone: "",
             },
+            status: "pending",
           }
     );
 
@@ -219,13 +219,9 @@ export default defineComponent({
       }
     };
 
-    const resetForm = () => {
-      formRef.value.resetFields();
-    };
+    const resetForm = () => formRef.value.resetFields();
 
-    const handleValidate = (_, valid) => {
-      validForm.value = !valid;
-    };
+    const handleValidate = (_, valid) => validForm.value = !valid;
 
     const handleDelete = async () => {
       try {
@@ -248,17 +244,17 @@ export default defineComponent({
     };
 
     const getDisabledMinutes = (selectedHour) => {
-      if (!selectedHour) {
-        return [];
-      }
-
       const nowTime = new Date();
 
-      if (selectedHour > nowTime.getHours()) {
+      if (!selectedHour && selectedHour > nowTime.getHours()) {
         return [];
-      } else {
-        return [...Array(nowTime.getMinutes())].map((_, idx) => idx);
       }
+
+      return [...Array(nowTime.getMinutes())].map((_, idx) => idx);
+    };
+
+    const rules = {
+      required: ([{ required: true, message: 'Обязательное поле!' }])
     };
 
     return {
@@ -273,6 +269,7 @@ export default defineComponent({
       handleDelete,
       getDisabledHours,
       getDisabledMinutes,
+      rules,
     };
   },
 });

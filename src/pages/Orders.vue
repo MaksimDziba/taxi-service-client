@@ -85,6 +85,19 @@ const columns = [
     align: "center",
     slots: { customRender: "checkbox", props: { disabled: true } },
   },
+  {
+    title: "Тариф",
+    dataIndex: ["tariff", "type"],
+    key: "tariff",
+    align: "center",
+  },
+  {
+    title: "Статус",
+    dataIndex: "status",
+    key: "status",
+    align: "center",
+    slots: { customRender: "statusOrder" },
+  },
 ];
 
 export default defineComponent({

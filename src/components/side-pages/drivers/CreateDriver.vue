@@ -192,9 +192,9 @@ export default defineComponent({
 
     const handleDelete = async () => {
       try {
-        const tariff = await DriverService.delete(formData.id);
+        const driver = await DriverService.delete(formData.id);
 
-        if (tariff) {
+        if (driver) {
           store.commit("table/IS_UPDATE_TABLE");
         }
       } finally {
