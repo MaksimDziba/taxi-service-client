@@ -1,20 +1,44 @@
 <template>
-  <Layout>
-    <template #content>
-      <router-view />
-    </template>
-  </Layout>
+  <component v-if="isDataLoaded" :is="layout" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent, onBeforeMount, ref } from 'vue';
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
-import Layout from "./layout/Layout.vue";
+import apiClient from './api/http/axios-client';
+
+import MainLayout from './layout/MainLayout.vue';
+import AuthLayout from './layout/AuthLayout.vue';
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   components: {
-    Layout,
+    MainLayout,
+    AuthLayout,
+  },
+  setup() {
+    const route = useRoute();
+    const store = useStore();
+    const isDataLoaded = ref(false);
+
+    onBeforeMount(async () => {
+      const token = await store.dispatch('base/checkAuth');
+
+      if (token) {
+        apiClient.defaults.headers.common.Authorization = token;
+      }
+
+      isDataLoaded.value = true;
+    });
+    
+    console.log(route?.meta);
+
+    return {
+      layout: computed(() => (!!route?.meta?.auth ? MainLayout : AuthLayout)),
+      isDataLoaded,
+    };
   },
 });
 </script>

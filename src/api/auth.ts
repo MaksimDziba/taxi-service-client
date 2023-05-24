@@ -4,17 +4,32 @@ import { IUser } from "../interface/User";
 
 import Notification from "../components/notification/Notification.vue";
 
-const loginUser = async (params: IUser) => {
+const loginUser = async (params) => {
   try {
-    const { data } = await apiClient.get("/auth/login", params);
+    const { data } = await apiClient.post('/auth/login', params);
 
-    if (data) {
-      const token = `Bearer ${data.Authenticate}`;
+    if (data.token && data.user) {
+      const token = `Bearer ${data.token}`;
 
-      apiClient.defaults.headers.common["Authorization"] = token;
+      apiClient.defaults.headers.common['Authorization'] = token;
+
+      return data || {};
     }
   } catch (error) {
     throw new Error(`При получении токена произошла ошибка. ${error}`);
+  }
+};
+
+const logoutUser = async () => {
+  try {
+    apiClient.defaults.headers.common["Authorization"] = "";
+  } catch (error) {
+    Notification({
+      message: "error",
+      description: `При выходе из приложения произошла ошибка: ${error}`,
+    });
+
+    throw new Error(`При выходе из приложения произошла ошибка. ${error}`);
   }
 };
 
@@ -33,4 +48,4 @@ const registrationUser = async (params: IUser) => {
   }
 };
 
-export { loginUser, registrationUser };
+export { loginUser, registrationUser, logoutUser };

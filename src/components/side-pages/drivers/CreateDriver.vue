@@ -35,10 +35,9 @@
         name="address"
         :rules="[{ required: true, message: 'Обязательное поле!' }]"
       >
-        <a-input
-          placeholder="Заполнить поле"
-          autoComplete="off"
-          v-model:value="formData.address"
+        <search-address
+          :modelValue="formData.address"
+          @update:modelValue="formData.address = $event"
         />
       </a-form-item>
 
@@ -131,8 +130,13 @@ import type { FormInstance } from "ant-design-vue";
 
 import DriverService from "../../../api/drivers";
 
+import SearchAddress from "../../search-fields/SearchAddress.vue";
+
 export default defineComponent({
   name: "CreateDriver",
+  components: {
+    SearchAddress,
+  },
   props: {
     data: Object,
   },
