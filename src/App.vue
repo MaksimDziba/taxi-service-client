@@ -32,8 +32,6 @@ export default defineComponent({
 
       isDataLoaded.value = true;
     });
-    
-    console.log(route?.meta);
 
     return {
       layout: computed(() => (!!route?.meta?.auth ? MainLayout : AuthLayout)),

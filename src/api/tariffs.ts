@@ -2,11 +2,9 @@ import apiClient from "./http/axios-client";
 import { ITariff } from "../types/Tariff";
 
 class TariffService {
-  async getAll(params: object): Promise<ITariff[]> | [] {
+  async getAll(): Promise<ITariff[] | []>  {
     try {
-      const response = await apiClient.get("/tariffs", {
-        params,
-      });
+      const response = await apiClient.get("/tariffs");
 
       return response.data || [];
     } catch (error) {

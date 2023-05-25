@@ -1,8 +1,9 @@
 import apiClient from "./http/axios-client";
+
 import { IClient } from "../types/Client";
 
 class ClientService {
-  async getAll(params: object): Promise<IClient[]> | [] {
+  async getAll(params: object): Promise<IClient[] | []>  {
     try {
       const response = await apiClient.get("/clients", {
         params,
