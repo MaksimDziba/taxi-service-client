@@ -25,7 +25,7 @@
           :item="formData.tariff"
           :modelValue="formData.tariffID"
           @update:modelValue="formData.tariffID = $event"
-          @select-tariff="handleSelectTariff"
+          @select="handleSelectTariff"
         />
       </a-form-item>
 

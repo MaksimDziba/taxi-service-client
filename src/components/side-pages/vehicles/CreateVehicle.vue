@@ -87,18 +87,24 @@
           placeholder="Заполнить поле"
         />
       </a-form-item>
+
+      <a-divider />
+
+      <div>Добавить водителя</div>
+
+      <a-divider />
+
+      <a-form-item
+        label=""
+        name="drivers"
+        :rules="[{ required: true, message: 'Обязательное поле!' }]"
+      >
+        <search-drivers
+          :modelValue="formData.drivers"
+          @update:modelValue="formData.drivers = $event"
+        />
+      </a-form-item>
     </a-form>
-
-    <a-divider />
-
-    <div>Добавить водителя</div>
-
-    <a-divider />
-
-    <search-drivers
-      :modelValue="formData.drivers"
-      @update:modelValue="formData.drivers = $event"
-    />
 
     <div class="side-page__footer">
       <a-button
@@ -171,7 +177,10 @@ export default defineComponent({
 
     const formData = reactive(
       isEdit
-        ? toRaw(props.data)
+        ? toRaw({
+            ...props.data,
+            drivers: props.data.drivers.map((driver) => driver.id),
+          })
         : {
             gosNumber: "",
             dateManufacture: "",

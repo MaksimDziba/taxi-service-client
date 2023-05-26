@@ -1,11 +1,11 @@
 import apiClient from "./http/axios-client";
 
+import { IDriver } from "../interface/Driver";
+
 class DriverService {
-  async getAll(params: object): Promise<IDriver[]> | [] {
+  async getAll(): Promise<IDriver[] | []> {
     try {
-      const response = await apiClient.get("/drivers", {
-        params,
-      });
+      const response = await apiClient.get("/drivers");
 
       return response.data || [];
     } catch (error) {

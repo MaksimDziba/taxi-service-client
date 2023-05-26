@@ -3,19 +3,15 @@
     v-model:value="value"
     placeholder="Начните вводит ФИО водителя"
     style="width: 100%"
-    mode="multiple"
     allow-clear
-    :filter-option="false"
-    :options="data"
-    :not-found-content="fetching ? undefined : null"
-    @search="fetchDrivers"
-    @change="handleChange"
+    mode="multiple"
+    :not-found-content="loading ? undefined : null"
+    :options="optionsDriver"
   ></a-select>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
-import { debounce } from "lodash-es";
+import { computed, defineComponent, onMounted, ref } from "vue";
 
 import DriversService from "../../api/drivers";
 
@@ -27,54 +23,46 @@ export default defineComponent({
     modelValue: Array,
     default: () => [],
   },
+  emits: ["update:modelValue", "select"],
   setup(props, { emit }) {
-    let lastFetchId = 0;
-
     const value = computed({
       get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
+      set: (driversID) => {
+        emit(
+          "select",
+          drivers.value.filter((driver) => driversID?.includes(driver.id))
+        );
+
+        emit("update:modelValue", driversID);
+      },
     });
 
-    const state = reactive({
-      data: [],
-      fetching: false,
-    });
+    const drivers = ref<IDriver[] | []>([]);
+    const optionsDriver = ref<{ label: string; value: number }[] | []>([]);
 
-    const fetchDrivers = debounce(async (value: string) => {
-      lastFetchId += 1;
+    const loading = ref(false);
 
-      const fetchId = lastFetchId;
+    onMounted(async () => await fetchDrivers());
 
-      state.data = [];
-      state.fetching = true;
+    const fetchDrivers = async () => {
+      loading.value = true;
 
-      const drivers: [] | IDriver[] = await DriversService.getAll({
-        search: value,
-      });
+      try {
+        drivers.value = await DriversService.getAll();
 
-      if (fetchId !== lastFetchId) {
-        // for fetch callback order
-        return;
+        optionsDriver.value = drivers.value.map((driver) => ({
+          label: driver.name,
+          value: driver.id,
+        }));
+      } finally {
+        loading.value = false;
       }
-
-      const data = drivers.map((driver) => ({
-        label: driver.name,
-        value: driver.id,
-      }));
-
-      state.data = data;
-      state.fetching = false;
-    }, 500);
-
-    const handleChange = (value: string) => {
-      console.log(`selected ${value}`);
     };
 
     return {
-      ...toRefs(state),
       value,
-      fetchDrivers,
-      handleChange,
+      optionsDriver,
+      loading,
     };
   },
 });

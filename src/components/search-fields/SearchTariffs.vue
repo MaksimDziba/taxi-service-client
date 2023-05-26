@@ -22,13 +22,13 @@ export default defineComponent({
   props: {
     modelValue: Number,
   },
-  emits: ["update:modelValue", "select-tariff"],
+  emits: ["update:modelValue", "select"],
   setup(props, { emit }) {
     const value = computed({
       get: () => props.modelValue,
       set: (tariffID) => {
         emit(
-          "select-tariff",
+          "select",
           tariffs.value.find((tariff) => tariff.id === tariffID)
         );
 
@@ -36,10 +36,10 @@ export default defineComponent({
       },
     });
 
-    onMounted(async () => await fetchTariffs());
-
     const tariffs = ref<[] | ITariff[]>([]);
     const optionsTariffs = ref<{ label: string; value: number }[] | []>([]);
+
+    onMounted(async () => await fetchTariffs());
 
     const fetchTariffs = async () => {
       tariffs.value = await TariffsService.getAll();
